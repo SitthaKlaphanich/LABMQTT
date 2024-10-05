@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/ao260/Downloads/tcp/main
+# Install script for directory: D:/LABMQQT/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

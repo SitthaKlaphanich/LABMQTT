@@ -2,34 +2,34 @@
 	"sources" : 
 	[
 		{
-			"file" : "C:/Users/ao260/Downloads/tcp/build/CMakeFiles/bootloader"
+			"file" : "D:/LABMQQT/build/CMakeFiles/bootloader"
 		},
 		{
-			"file" : "C:/Users/ao260/Downloads/tcp/build/CMakeFiles/bootloader.rule"
+			"file" : "D:/LABMQQT/build/CMakeFiles/bootloader.rule"
 		},
 		{
-			"file" : "C:/Users/ao260/Downloads/tcp/build/CMakeFiles/bootloader-complete.rule"
+			"file" : "D:/LABMQQT/build/CMakeFiles/bootloader-complete.rule"
 		},
 		{
-			"file" : "C:/Users/ao260/Downloads/tcp/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+			"file" : "D:/LABMQQT/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
 		},
 		{
-			"file" : "C:/Users/ao260/Downloads/tcp/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+			"file" : "D:/LABMQQT/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
 		},
 		{
-			"file" : "C:/Users/ao260/Downloads/tcp/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+			"file" : "D:/LABMQQT/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
 		},
 		{
-			"file" : "C:/Users/ao260/Downloads/tcp/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+			"file" : "D:/LABMQQT/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
 		},
 		{
-			"file" : "C:/Users/ao260/Downloads/tcp/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+			"file" : "D:/LABMQQT/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
 		},
 		{
-			"file" : "C:/Users/ao260/Downloads/tcp/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+			"file" : "D:/LABMQQT/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
 		},
 		{
-			"file" : "C:/Users/ao260/Downloads/tcp/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+			"file" : "D:/LABMQQT/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
 		}
 	],
 	"target" : 
