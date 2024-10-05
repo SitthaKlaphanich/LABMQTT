@@ -23,8 +23,11 @@
 
 #include "driver/gpio.h"
 
+#include "led_c_connector.h"
+#include "sevensegment_c_connector.h"
+
 #define GPIO_INPUT_IO_1     23  
-#define LED_INPUT           22  
+#define LED_INPUT           32  
 #define GPIO_INPUT_PIN_SEL  ((1ULL<<GPIO_INPUT_IO_1))
 #define ESP_INTR_FLAG_DEFAULT 0
 
@@ -43,7 +46,7 @@ static void IRAM_ATTR gpio_isr_handler(void* arg) {
     uint32_t gpio_num = (uint32_t) arg;
     xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
 }
-
+// Button
 static void gpio_task_example(void* arg) {
     char data[10];
     bool status = 0;
@@ -55,6 +58,35 @@ static void gpio_task_example(void* arg) {
             sprintf(data, "%d", status);
             esp_mqtt_client_publish(mqtt_client, "KMITL/SIET/65030258/topic/BUTTON", data, 0, 0, 0);
         }
+    }
+}
+
+uint8_t counter = 0;
+TaskHandle_t xSevenSegmentHandle = NULL;
+TaskHandle_t xCounterHandle = NULL;
+void vTaskCounter(void *Parameters)
+{
+    while (1)
+    {
+        if(counter++ > 99)
+            counter = 0;
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+    }
+}
+
+void vTaskScanSevenSegment(void *Parameters)
+{
+    while (1)
+    {
+        s1_displayNumber(counter / 10);
+        s1_displayOn();
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+        s1_displayOff();
+
+        s2_displayNumber(counter % 10);
+        s2_displayOn();
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+        s2_displayOff();
     }
 }
 
@@ -78,6 +110,9 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 
         msg_id = esp_mqtt_client_subscribe(client, "KMITL/SIET/65030258/topic/LED", 1); // Subscribe to the LED topic
         ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
+
+        msg_id = esp_mqtt_client_subscribe(client, "KMITL/SIET/65030258/topic/SevenSegemet", 1); // Subscribe to the SevenSegemet topic
+        ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
         break;
     case MQTT_EVENT_DISCONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
@@ -99,15 +134,26 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
         printf("DATA=%.*s\r\n", event->data_len, event->data);
 
-        // Check if the message is for controlling the LED
+        //  LED
         if (strncmp(event->topic, "KMITL/SIET/65030258/topic/LED", event->topic_len) == 0) {
             if (event->data_len == 2 && strncmp(event->data, "ON", 2) == 0) {
-                gpio_set_level(LED_INPUT, 1); // Turn ON LED
+                gpio_set_level(LED_INPUT, 1); 
             } else if (event->data_len == 3 && strncmp(event->data, "OFF", 3) == 0) {
-                gpio_set_level(LED_INPUT, 0); // Turn OFF LED
+                gpio_set_level(LED_INPUT, 0); 
             }
         }
+        // SevenSegemet
+        if (strncmp(event->topic, "KMITL/SIET/65030258/topic/SevenSegemet", event->topic_len) == 0) {
+        char number_str[3];
+        snprintf(number_str, event->data_len + 1, "%.*s", event->data_len, event->data);
+        int in_number = atoi(number_str); 
+
+        if (in_number >= 0 && in_number <= 99) {
+            counter = in_number; 
+        }
+        }
         break;
+
     case MQTT_EVENT_ERROR:
         ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
         if (event->error_handle->error_type == MQTT_ERROR_TYPE_TCP_TRANSPORT) {
@@ -190,6 +236,11 @@ void app_main(void) {
     led_conf.pull_down_en = 0;
     led_conf.pull_up_en = 0;
     gpio_config(&led_conf);
+    
+    // Configure SevenSegment 
+     xTaskCreate(vTaskScanSevenSegment, "Seven Seg", 
+        1024, NULL, 10, &xSevenSegmentHandle);
+    
 
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_ERROR_CHECK(esp_netif_init());

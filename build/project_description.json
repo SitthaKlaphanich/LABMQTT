@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "mqtt_tcp",
-    "project_version":    "a427589-dirty",
+    "project_version":    "965eefb-dirty",
     "project_path":       "D:/LABMQQT",
     "idf_path":           "C:/esp/v5.3.1/esp-idf",
     "build_dir":          "D:/LABMQQT/build",
@@ -1210,7 +1210,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [ "LED", "SEVENSEGMENT", "protocol_examples_common" ],
             "file": "D:/LABMQQT/build/esp-idf/main/libmain.a",
-            "sources": [ "D:/LABMQQT/main/app_main.c" ],
+            "sources": [ "D:/LABMQQT/main/sevensegment_c_connector.cpp", "D:/LABMQQT/main/app_main.c", "D:/LABMQQT/main/led_c_connector.cpp" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {
