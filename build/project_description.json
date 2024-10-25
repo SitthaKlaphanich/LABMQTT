@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "mqtt_tcp",
-    "project_version":    "965eefb-dirty",
+    "project_version":    "e256a6e-dirty",
     "project_path":       "D:/LABMQQT",
     "idf_path":           "C:/esp/v5.3.1/esp-idf",
     "build_dir":          "D:/LABMQQT/build",

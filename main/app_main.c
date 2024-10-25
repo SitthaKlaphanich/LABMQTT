@@ -27,7 +27,7 @@
 #include "sevensegment_c_connector.h"
 
 #define GPIO_INPUT_IO_1     23  
-#define LED_INPUT           32  
+#define LED    32  
 #define GPIO_INPUT_PIN_SEL  ((1ULL<<GPIO_INPUT_IO_1))
 #define ESP_INTR_FLAG_DEFAULT 0
 
@@ -135,11 +135,13 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         printf("DATA=%.*s\r\n", event->data_len, event->data);
 
         //  LED
-        if (strncmp(event->topic, "KMITL/SIET/65030258/topic/LED", event->topic_len) == 0) {
-            if (event->data_len == 2 && strncmp(event->data, "ON", 2) == 0) {
-                gpio_set_level(LED_INPUT, 1); 
-            } else if (event->data_len == 3 && strncmp(event->data, "OFF", 3) == 0) {
-                gpio_set_level(LED_INPUT, 0); 
+       if (strncmp(event->topic, "KMITL/SIET/65030258/topic/LED", event->topic_len) == 0) {
+            if (strstr(event->data, "ON") != NULL) {
+                printf("LED ON\r\n" );
+                gpio_set_level(LED, 1); // Turn ON LED
+            } else if (strstr(event->data, "OFF") != NULL) {
+                printf("LED OFF\r\n" );
+                gpio_set_level(LED, 0); // Turn OFF LED
             }
         }
         // SevenSegemet
@@ -229,13 +231,7 @@ void app_main(void) {
     gpio_isr_handler_add(GPIO_INPUT_IO_1, gpio_isr_handler, (void*) GPIO_INPUT_IO_1);
 
     // Configure LED GPIO
-    gpio_config_t led_conf = {};
-    led_conf.intr_type = GPIO_INTR_DISABLE;
-    led_conf.mode = GPIO_MODE_OUTPUT;
-    led_conf.pin_bit_mask = (1ULL << LED_INPUT);
-    led_conf.pull_down_en = 0;
-    led_conf.pull_up_en = 0;
-    gpio_config(&led_conf);
+    gpio_set_direction(LED, GPIO_MODE_OUTPUT);
     
     // Configure SevenSegment 
      xTaskCreate(vTaskScanSevenSegment, "Seven Seg", 
